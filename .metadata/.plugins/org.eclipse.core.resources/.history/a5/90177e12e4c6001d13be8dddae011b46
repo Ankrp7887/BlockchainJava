@@ -1,0 +1,31 @@
+package com.blockchain;
+
+import java.math.BigInteger;
+
+import org.web3j.protocol.Web3j;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.http.HttpService;
+import com.blockchain.SimpleStorage;
+
+public class ETHconnect {
+	private final static String PRIVATE_KEY = "0xf9b9601c3b7f979d2edac3b923f9b9d2a366396725ae7f936e291d71add835d2";
+    private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
+    private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+	
+	public static void txn() throws Exception {
+		
+	    Web3j web3 = Web3j.build(new HttpService("http://localhost:8545"));
+	    Credentials credentials = Credentials.create(PRIVATE_KEY);
+	    
+	     //deploying your contract
+//	    SimpleStorage simplestorage = SimpleStorage.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT).send();
+	    
+	     //use deployed contract
+	    SimpleStorage simplestorage = SimpleStorage.load("0xbbD820f30994e44867DD634fD8Ad639918af4e73", web3, credentials, GAS_PRICE, GAS_LIMIT);
+	    
+	     //calling deployed smart contract
+	    TransactionReceipt result = simplestorage.write(GAS_PRICE).send();
+	    System.out.println("Value : " + result);
+	}
+}
